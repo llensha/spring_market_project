@@ -18,16 +18,4 @@ public class ProductDto {
         this.price = product.getPrice();
     }
 
-    public Long getId() {
-        return id;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public int getPrice() {
-        return price;
-    }
-
 }

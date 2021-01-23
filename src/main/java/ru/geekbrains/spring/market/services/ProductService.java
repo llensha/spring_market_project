@@ -2,16 +2,15 @@ package ru.geekbrains.spring.market.services;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import ru.geekbrains.spring.market.dto.ProductDto;
+import ru.geekbrains.spring.market.exceptions_handling.ResourceNotFoundException;
 import ru.geekbrains.spring.market.models.Product;
 import ru.geekbrains.spring.market.repositories.ProductRepository;
 
-import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -19,21 +18,12 @@ public class ProductService {
 
     private final ProductRepository productRepository;
 
-    public List<ProductDto> findAll() {
-        return productRepository.findAll().stream().map(ProductDto::new).collect(Collectors.toList());
+    public Page<ProductDto> findAll(Specification<Product> specification, int page, int pageSize) {
+        return productRepository.findAll(specification, PageRequest.of(page - 1, pageSize)).map(ProductDto::new);
     }
 
-    public Page<ProductDto> findAll(int page) {
-        Page<Product> productPage = productRepository.findAll(PageRequest.of(page - 1, 5));
-        return new PageImpl<>(productPage.getContent().stream().map(ProductDto::new).collect(Collectors.toList()), productPage.getPageable(), productPage.getTotalElements());
-    }
-
-//    public List<Product> findAllByPrice(int minPrice, int maxPrice) {
-//        return productRepository.findAllByPriceBetween(minPrice, maxPrice);
-//    }
-
-    public ProductDto findProductById(Long id) {
-        return new ProductDto(productRepository.findById(id).get());
+    public Optional<ProductDto> findProductById(Long id) {
+        return productRepository.findById(id).map(ProductDto::new);
     }
 
     public ProductDto saveOrUpdate(ProductDto productDto) {
@@ -41,7 +31,7 @@ public class ProductService {
         if (productDto.getId() == null) {
             product = new Product();
         } else {
-            product = productRepository.findById(productDto.getId()).get();
+            product = productRepository.findById(productDto.getId()).orElseThrow(() -> new ResourceNotFoundException("Продукт с id = " + productDto.getId() + " не найден"));
         }
         product.setTitle(productDto.getTitle());
         product.setPrice(productDto.getPrice());
@@ -49,6 +39,7 @@ public class ProductService {
     }
 
     public void deleteProductById(Long id) {
+        productRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Продукт с id = " + id + " не найден"));
         productRepository.deleteById(id);
     }
 

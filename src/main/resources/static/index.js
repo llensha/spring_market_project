@@ -12,8 +12,16 @@ angular.module('market', []).controller('indexController', function ($scope, $ht
                 p: pageIndex
             }
         }).then(function (response) {
-            $scope.ProductsPage = response.data;
-            $scope.PaginationArray = $scope.generatePagesIndexes(1, $scope.ProductsPage.totalPages);
+            $scope.productsPage = response.data;
+            let minPageIndex = pageIndex - 2;
+            if (minPageIndex < 1) {
+                minPageIndex = 1;
+            }
+            let maxPageIndex = pageIndex + 2;
+            if (maxPageIndex > $scope.productsPage.totalPages) {
+                maxPageIndex = $scope.productsPage.totalPages;
+            }
+            $scope.paginationArray = $scope.generatePagesIndexes(minPageIndex, maxPageIndex);
         });
     };
 
