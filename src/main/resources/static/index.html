@@ -34,17 +34,18 @@
             </div>
         </div>
         <div>
-            <button class="btn btn-success" type="submit">Применить</button>
+            <button class="btn btn-primary" type="submit">Применить</button>
         </div>
     </form>
 
     <br>
     <h3>Список товаров</h3>
     <table class="table table-hover" cellpadding="0" cellspacing="0">
-        <thead>
+        <thead class="thead-light">
         <tr>
             <td><b>Название</b></td>
             <td><b>Цена</b></td>
+            <td></td>
             <td></td>
         </tr>
         </thead>
@@ -52,6 +53,9 @@
         <tr ng-repeat="product in productsPage.content">
             <td>{{product.title}}</td>
             <td>{{product.price}}</td>
+            <td>
+                <button class="btn btn-success" ng-click="addProductToCart(product.id)">В корзину</button>
+            </td>
             <td>
                 <button class="btn btn-danger" ng-click="deleteProductById(product.id)">Удалить товар</button>
             </td>
@@ -73,6 +77,35 @@
         </ul>
     </nav>
 
+    <br>
+    <h4>Корзина</h4>
+    <table class="table" cellpadding="0" cellspacing="0">
+        <thead class="thead-light">
+        <tr>
+            <td><b>Название</b></td>
+            <td><b>Цена</b></td>
+            <td><b>Количество</b></td>
+            <td></td>
+        </tr>
+        </thead>
+        <tbody>
+        <tr ng-repeat="cartItem in cartList">
+            <td>{{cartItem.title}}</td>
+            <td>{{cartItem.price}}</td>
+            <td>
+                <button class="btn btn-outline-dark btn-sm mr-md-3" ng-click="reduceNumberOfProduct(cartItem.id)"> - </button>
+                <label> {{cartItem.number}} </label>
+                <button class="btn btn-outline-dark btn-sm ml-md-3" ng-click="addProductToCart(cartItem.id)"> + </button>
+            </td>
+            <td>
+                <button class="btn btn-danger btn-sm" ng-click="deleteProductFromCart(cartItem.id)">Удалить товар</button>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <button class="btn btn-danger" ng-click="deleteAllProductsFromCart()">Очистить корзину</button>
+    <br>
+    <br>
     <br>
     <h4>Добавить новый товар</h4>
     <form novalidate ng-submit="submitCreateNewProduct()">

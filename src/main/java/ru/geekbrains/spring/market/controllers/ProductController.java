@@ -30,7 +30,7 @@ public class ProductController {
 
     @GetMapping("/{id}")
     public ProductDto findProductById(@PathVariable Long id) {
-        return productService.findProductById(id).orElseThrow(() -> new ResourceNotFoundException("Продукт с id = " + id + " не найден"));
+        return productService.findProductDtoById(id).orElseThrow(() -> new ResourceNotFoundException("Продукт с id = " + id + " не найден"));
     }
 
     @PostMapping

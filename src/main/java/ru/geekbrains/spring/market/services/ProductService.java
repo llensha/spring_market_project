@@ -22,8 +22,12 @@ public class ProductService {
         return productRepository.findAll(specification, PageRequest.of(page - 1, pageSize)).map(ProductDto::new);
     }
 
-    public Optional<ProductDto> findProductById(Long id) {
+    public Optional<ProductDto> findProductDtoById(Long id) {
         return productRepository.findById(id).map(ProductDto::new);
+    }
+
+    public Optional<Product> findProductById(Long id) {
+        return productRepository.findById(id);
     }
 
     public ProductDto saveOrUpdate(ProductDto productDto) {

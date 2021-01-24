@@ -11,7 +11,7 @@ angular.module('market', []).controller('indexController', function ($scope, $ht
                 max_price: $scope.filter ? $scope.filter.max_price : null,
                 p: pageIndex
             }
-        }).then(function (response) {
+        }).then(function(response) {
             $scope.productsPage = response.data;
             let minPageIndex = pageIndex - 2;
             if (minPageIndex < 1) {
@@ -35,7 +35,7 @@ angular.module('market', []).controller('indexController', function ($scope, $ht
 
     $scope.submitCreateNewProduct = function() {
         $http.post(contextPath + '/products', $scope.newProduct)
-            .then(function (response) {
+            .then(function(response) {
                 $scope.newProduct = null;
                 $scope.fillTable();
             });
@@ -43,10 +43,46 @@ angular.module('market', []).controller('indexController', function ($scope, $ht
 
     $scope.deleteProductById = function(productId) {
         $http.delete(contextPath + '/products/' + productId)
-        .then(function (response) {
+        .then(function(response) {
             $scope.fillTable();
         });
     };
 
+    $scope.fillCart = function() {
+        $http.get(contextPath + '/cart')
+            .then(function(response) {
+            $scope.cartList = response.data;
+        });
+    };
+
+    $scope.addProductToCart = function(productId) {
+        $http.get(contextPath + '/cart/add/' + productId)
+            .then(function(response) {
+                $scope.fillCart();
+            });
+    };
+
+    $scope.reduceNumberOfProduct = function(productId) {
+        $http.get(contextPath + '/cart/reduce/' + productId)
+            .then(function(response) {
+                $scope.fillCart();
+            });
+    };
+
+    $scope.deleteProductFromCart = function(productId) {
+        $http.get(contextPath + '/cart/delete/' + productId)
+            .then(function(response) {
+                $scope.fillCart();
+            });
+    };
+
+    $scope.deleteAllProductsFromCart = function() {
+        $http.get(contextPath + '/cart/delete')
+            .then(function(response) {
+                $scope.fillCart();
+            });
+    };
+
     $scope.fillTable();
+    $scope.fillCart();
 });
