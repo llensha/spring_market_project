@@ -48,5 +48,48 @@ angular.module('market', []).controller('indexController', function ($scope, $ht
         });
     };
 
+    $scope.showCart = function() {
+        $http.get(contextPath + '/cart')
+            .then(function(response) {
+                $scope.cartList = response.data;
+            });
+    };
+
+    $scope.addToCart = function(productId) {
+        $http.get(contextPath + '/cart/add/' + productId)
+            .then(function(response) {
+                $scope.showCart();
+            });
+    };
+
+    $scope.incQuantity = function(orderItemId) {
+        $http.get(contextPath + '/cart/inc/' + orderItemId)
+            .then(function(response) {
+                $scope.showCart();
+            });
+    };
+
+    $scope.decQuantity = function(orderItemId) {
+        $http.get(contextPath + '/cart/dec/' + orderItemId)
+            .then(function(response) {
+                $scope.showCart();
+            });
+    };
+
+    $scope.deleteProductFromCart = function(productId) {
+        $http.get(contextPath + '/cart/delete/' + productId)
+            .then(function(response) {
+                $scope.showCart();
+            });
+    };
+
+    $scope.deleteAllProductsFromCart = function() {
+        $http.get(contextPath + '/cart/delete')
+            .then(function(response) {
+                $scope.showCart();
+            });
+    };
+
     $scope.fillTable();
+    $scope.showCart();
 });

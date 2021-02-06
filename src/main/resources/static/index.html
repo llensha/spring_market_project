@@ -17,35 +17,36 @@
 <div class="container" ng-controller="indexController">
     <h1>My Market</h1>
     <br>
-    <h4>Фильтр</h4>
+    <h5>Фильтр</h5>
     <form novalidate ng-submit="fillTable()">
         <div class="form-group row">
             <div class="form-group col-md-3">
-                <label for="filterTitle">Название товара</label>
-                <input class="form-control" type="text" ng-model="filter.title" id="filterTitle">
+                <label for="filterTitle" class="col-form-label col-form-label-sm">Название товара</label>
+                <input class="form-control form-control-sm" type="text" ng-model="filter.title" id="filterTitle">
             </div>
             <div class="form-group col-md-3">
-                <label for="filterMinPrice">Минимальная цена</label>
-                <input class="form-control" type="number" ng-model="filter.min_price" id="filterMinPrice">
+                <label for="filterMinPrice" class="col-form-label col-form-label-sm">Минимальная цена</label>
+                <input class="form-control form-control-sm" type="number" min="0" ng-model="filter.min_price" id="filterMinPrice">
             </div>
             <div class="form-group col-md-3">
-                <label for="filterMaxPrice">Максимальная цена</label>
-                <input class="form-control" type="number" ng-model="filter.max_price" id="filterMaxPrice">
+                <label for="filterMaxPrice" class="col-form-label col-form-label-sm">Максимальная цена</label>
+                <input class="form-control form-control-sm" type="number" min="0" ng-model="filter.max_price" id="filterMaxPrice">
             </div>
-        </div>
-        <div>
-            <button class="btn btn-success" type="submit">Применить</button>
+            <div class="form-group col-md-3">
+                <label for="buttonSubmit"></label><br>
+                <button class="btn btn-primary" type="submit" id="buttonSubmit">Применить</button>
+            </div>
         </div>
     </form>
 
-    <br>
     <h3>Список товаров</h3>
-    <table class="table table-hover" cellpadding="0" cellspacing="0">
-        <thead>
+    <table class="table table-hover table-sm" cellpadding="0" cellspacing="0">
+        <thead class="table-secondary">
         <tr>
             <td><b>Название</b></td>
             <td><b>Цена</b></td>
             <td></td>
+<!--            <td></td>-->
         </tr>
         </thead>
         <tbody>
@@ -53,14 +54,17 @@
             <td>{{product.title}}</td>
             <td>{{product.price}}</td>
             <td>
-                <button class="btn btn-danger" ng-click="deleteProductById(product.id)">Удалить товар</button>
+                <button class="btn btn-success btn-sm" ng-click="addToCart(product.id)">В корзину</button>
             </td>
+<!--            <td>-->
+<!--                <button class="btn btn-danger" ng-click="deleteProductById(product.id)">Удалить товар</button>-->
+<!--            </td>-->
         </tr>
         </tbody>
     </table>
 
     <nav aria-label="Page navigation">
-        <ul class="pagination">
+        <ul class="pagination pagination-sm">
             <li ng-class="productsPage.first ? 'page-item disabled' : 'page-item'">
                 <a class="page-link" ng-click="fillTable(productsPage.number)">Пред.</a>
             </li>
@@ -74,20 +78,60 @@
     </nav>
 
     <br>
-    <h4>Добавить новый товар</h4>
-    <form novalidate ng-submit="submitCreateNewProduct()">
-        <div class="form-group col-md-3">
-            <label for="newProductTitle">Название</label>
-            <input class="form-control" type="text" ng-model="newProduct.title" id="newProductTitle">
-        </div>
-        <div class="form-group col-md-3">
-            <label for="newProductPrice">Цена</label>
-            <input class="form-control" type="number" min="0" ng-model="newProduct.price" id="newProductPrice">
-        </div>
-        <div>
-            <button class="btn btn-success" type="submit">Сохранить</button>
-        </div>
-    </form>
+    <div class="cart" ng-show="cartList.totalSumma>0">
+        <h4>Корзина</h4>
+        <table class="table table-sm" cellpadding="0" cellspacing="0">
+            <thead class="table-primary">
+            <tr>
+                <td><b>Название</b></td>
+                <td><b>Цена</b></td>
+                <td><b>Количество</b></td>
+                <td><b>Сумма</b></td>
+                <td></td>
+            </tr>
+            </thead>
+            <tbody>
+            <tr ng-repeat="orderItem in cartList.items">
+                <td>{{orderItem.productTitle}}</td>
+                <td>{{orderItem.price}}</td>
+                <td>
+                    <button class="btn btn-outline-dark btn-sm mr-md-3" ng-click="decQuantity(orderItem.id)"> - </button>
+                    <label> {{orderItem.quantity}} </label>
+                    <button class="btn btn-outline-dark btn-sm ml-md-3" ng-click="incQuantity(orderItem.id)"> + </button>
+                </td>
+                <td>{{orderItem.summa}}</td>
+                <td>
+                    <button class="btn btn-danger btn-sm" ng-click="deleteProductFromCart(orderItem.id)">Удалить товар</button>
+                </td>
+            </tr>
+            <tr class="table-info">
+                <td><b>Итого</b></td>
+                <td></td>
+                <td></td>
+                <td><b>{{cartList.totalSumma}}</b></td>
+            </tr>
+            </tbody>
+        </table>
+        <button class="btn btn-danger" ng-click="deleteAllProductsFromCart()">Очистить корзину</button>
+    </div>
+
+<!--    <br>-->
+<!--    <br>-->
+<!--    <br>-->
+<!--    <h4>Добавить новый товар</h4>-->
+<!--    <form novalidate ng-submit="submitCreateNewProduct()">-->
+<!--        <div class="form-group col-md-3">-->
+<!--            <label for="newProductTitle">Название</label>-->
+<!--            <input class="form-control" type="text" ng-model="newProduct.title" id="newProductTitle">-->
+<!--        </div>-->
+<!--        <div class="form-group col-md-3">-->
+<!--            <label for="newProductPrice">Цена</label>-->
+<!--            <input class="form-control" type="number" min="0" ng-model="newProduct.price" id="newProductPrice">-->
+<!--        </div>-->
+<!--        <div>-->
+<!--            <button class="btn btn-success" type="submit">Сохранить</button>-->
+<!--        </div>-->
+<!--    </form>-->
 
 </div>
 </body>

@@ -27,3 +27,13 @@ INSERT INTO products (title, price) VALUES
 ('Шоколад', 13),
 ('Лимон', 5),
 ('Варенье', 15);
+
+CREATE TABLE order_items (
+                          id              BIGSERIAL PRIMARY KEY,
+                          title           VARCHAR(255),
+                          price           INT,
+                          quantity        INT,
+                          summa           INT,
+                          created_at      TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                          updated_at      TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
