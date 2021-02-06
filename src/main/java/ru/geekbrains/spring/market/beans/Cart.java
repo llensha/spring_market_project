@@ -2,7 +2,10 @@ package ru.geekbrains.spring.market.beans;
 
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.annotation.Scope;
+import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Component;
+import org.springframework.web.context.WebApplicationContext;
 import ru.geekbrains.spring.market.exceptions_handling.ResourceNotFoundException;
 import ru.geekbrains.spring.market.models.OrderItem;
 import ru.geekbrains.spring.market.models.Product;
@@ -15,6 +18,7 @@ import java.util.List;
 @Component
 @Data
 @RequiredArgsConstructor
+@Scope(value = WebApplicationContext.SCOPE_SESSION, proxyMode = ScopedProxyMode.TARGET_CLASS)
 public class Cart {
 
     private final ProductService productService;
