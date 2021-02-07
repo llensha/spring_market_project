@@ -91,19 +91,24 @@ angular.module('market', []).controller('indexController', function ($scope, $ht
             });
     };
 
-    $scope.tryToAuth = function () {
+    $scope.tryToAuth = function() {
         $http.post(contextPath + '/auth', $scope.user)
             .then(function successCallback(response) {
                 if (response.data.token) {
                     $http.defaults.headers.common.Authorization = 'Bearer ' + response.data.token;
-                    $scope.user.username = null;
+                    // $scope.user.username = null;
                     $scope.user.password = null;
                     $scope.authorized = true;
-                    $scope.fillTable();
                 }
             }, function errorCallback(response) {
                 window.alert("Ошибка авторизации");
             });
+    };
+
+    $scope.tryToLogout = function() {
+        $http.defaults.headers.common.Authorization = '';
+        $scope.user.username = null;
+        $scope.authorized = false;
     };
 
     $scope.fillTable();
