@@ -63,6 +63,22 @@ angular.module('market', []).controller('indexController', function ($scope, $ht
             });
     };
 
+    $scope.showRegistrationForm = function() {
+        $scope.isRegistrationForm = true;
+    };
+
+    $scope.registry = function() {
+        $http.post(contextPath + '/users', $scope.newUser)
+            .then(function successCallback(response) {
+                $scope.newUser = null;
+                $scope.isRegistrationForm = false;
+                $scope.fillTable();
+                window.alert("Вы успешно зарегистрировались!\nТеперь можете войти");
+            }, function errorCallback(response) {
+                window.alert("Ошибка регистрации! Попробуйте еще раз");
+            });
+    };
+
     $scope.tryToAuth = function() {
         $http.post(contextPath + '/auth', $scope.user)
             .then(function successCallback(response) {
@@ -124,9 +140,15 @@ angular.module('market', []).controller('indexController', function ($scope, $ht
             });
     };
 
+    $scope.showAddressForm = function() {
+        $scope.isAddressForm = true;
+    };
+
     $scope.checkout = function() {
-        $http.get(contextPath + '/api/v1/orders/checkout')
+        $http.post(contextPath + '/api/v1/orders/checkout', $scope.newOrder)
             .then(function(response) {
+                $scope.isAddressForm = false;
+                $scope.newOrder = null;
                 $scope.showOrders();
                 $scope.showCart();
             });
@@ -134,7 +156,5 @@ angular.module('market', []).controller('indexController', function ($scope, $ht
 
 
     $scope.fillTable();
-    // $scope.showCart();
-    // $scope.showOrders();
 
 });

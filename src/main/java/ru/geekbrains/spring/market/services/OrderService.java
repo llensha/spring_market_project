@@ -28,8 +28,8 @@ public class OrderService {
         return orderRepository.findAllByUserUsername(username);
     }
 
-    public Order createOrderFromCart(User user) {
-        Order order = new Order(cart, user);
+    public Order createOrderFromCart(User user, String address) {
+        Order order = new Order(cart, user, address);
         order = orderRepository.save(order);
         cart.deleteAll();
         return order;

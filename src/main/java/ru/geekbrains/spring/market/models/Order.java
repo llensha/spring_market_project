@@ -30,6 +30,9 @@ public class Order {
     @Column(name = "sum")
     private int totalSum;
 
+    @Column(name = "address")
+    private String address;
+
     @Column(name = "created_at")
     @CreationTimestamp
     private LocalDateTime createdAt;
@@ -42,9 +45,10 @@ public class Order {
     @JoinColumn(name = "user_id")
     private User user;
 
-    public Order(Cart cart, User user) {
+    public Order(Cart cart, User user, String address) {
         this.totalSum = cart.getTotalSum();
         this.user = user;
+        this.address = address;
         items = new ArrayList<>();
         cart.getItems().stream().forEach((oi) -> {
             oi.setId(null);

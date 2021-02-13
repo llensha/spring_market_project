@@ -69,6 +69,7 @@ CREATE TABLE orders (
                              id              BIGSERIAL PRIMARY KEY,
                              user_id         BIGINT NOT NULL REFERENCES users(id),
                              sum             INT,
+                             address         VARCHAR(255),
                              created_at      TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                              updated_at      TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
@@ -77,7 +78,6 @@ CREATE TABLE order_items (
                           id              BIGSERIAL PRIMARY KEY,
                           order_id        BIGINT NOT NULL REFERENCES orders(id),
                           product_id      BIGINT NOT NULL REFERENCES products(id),
-                          title           VARCHAR(255),
                           price           INT,
                           quantity        INT,
                           sum             INT,

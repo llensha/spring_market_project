@@ -30,10 +30,10 @@ public class OrderController {
         return orderService.findAll(principal.getName()).stream().map(OrderDto::new).collect(Collectors.toList());
     }
 
-    @GetMapping("/checkout")
+    @PostMapping("/checkout")
     @ResponseStatus(HttpStatus.CREATED)
-    public void checkout(Principal principal) {
+    public void checkout(Principal principal, @RequestBody OrderDto orderDto) {
         User user = userService.findByUsername(principal.getName()).orElseThrow(() -> new ResourceNotFoundException("Такой пользователь не найден при оформлении заказа"));
-        orderService.createOrderFromCart(user);
+        orderService.createOrderFromCart(user, orderDto.getAddress());
     }
 }

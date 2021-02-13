@@ -17,6 +17,7 @@ public class OrderDto {
     private int totalSum;
     private String creationDateTime;
     private String username;
+    private String address;
     private List<OrderItemDto> items;
 
     public OrderDto(Order order) {
