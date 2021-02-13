@@ -12,10 +12,10 @@ import java.util.stream.Collectors;
 public class CartDto {
 
     private List<OrderItemDto> items;
-    private int totalSumma;
+    private int totalSum;
 
     public CartDto(Cart cart) {
-        this.totalSumma = cart.getTotalSumma();
+        this.totalSum = cart.getTotalSum();
         this.items = cart.getItems().stream().map(OrderItemDto::new).collect(Collectors.toList());
     }
 }

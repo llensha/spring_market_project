@@ -81,7 +81,7 @@
                 <td class="col-5">{{product.title}}</td>
                 <td class="col-2">{{product.price}}</td>
                 <td class="col-2">
-                    <button class="btn btn-link btn-sm" ng-click="addToCart(product.id)" style="margin: 0px; padding: 0px">
+                    <button class="btn btn-link btn-sm" ng-show="authorized" ng-click="addToCart(product.id)" style="margin: 0px; padding: 0px">
                         <img src="images/cart.ico" alt="add">
                     </button>
                 </td>
@@ -106,7 +106,7 @@
             </ul>
         </nav>
 
-        <div class="cart" ng-show="cartList.totalSumma>0" style="margin-top: 25px">
+        <div class="cart" ng-show="authorized && cartList.totalSum>0" style="margin-top: 25px">
             <h4>Корзина</h4>
             <table class="table table-sm" cellpadding="0" cellspacing="0">
                 <thead class="table-primary">
@@ -127,7 +127,7 @@
                         <label> {{orderItem.quantity}} </label>
                         <button class="btn btn-outline-secondary btn-sm ml-md-3" ng-click="incQuantity(orderItem.id)"> + </button>
                     </td>
-                    <td class="col-2">{{orderItem.summa}}</td>
+                    <td class="col-2">{{orderItem.sum}}</td>
                     <td class="col-1">
                         <button class="btn btn-link btn-sm" ng-click="deleteProductFromCart(orderItem.id)" style="margin: 0px; padding: 0px">
                             <img src="images/basket.ico" alt="delete">
@@ -138,17 +138,41 @@
                     <td class="col-5"><b>Итого</b></td>
                     <td class="col-2"></td>
                     <td class="col-2"></td>
-                    <td class="col-2"><b>{{cartList.totalSumma}}</b></td>
+                    <td class="col-2"><b>{{cartList.totalSum}}</b></td>
                     <td class="col-1"></td>
                 </tr>
                 </tbody>
             </table>
             <div style="display: flex; justify-content: space-between">
-                <button class="btn btn-success" ng-click="createOrder()">Оформить заказ</button>
+                <button class="btn btn-success" ng-click="checkout()">Оформить заказ</button>
                 <button class="btn btn-danger" ng-click="deleteAllProductsFromCart()">Очистить корзину</button>
             </div>
 
         </div>
+        <div class="orders" ng-show="authorized" style="margin-top: 25px">
+            <h3>Мои заказы</h3>
+            <table class="table table-hover table-sm" cellpadding="0" cellspacing="0">
+                <thead class="table-primary">
+                <tr class="d-flex">
+                    <th class="col-2">Номер заказа</th>
+                    <th class="col-2">Дата</th>
+                    <th class="col-1">Сумма</th>
+                    <th class="col-7"> </th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr class="d-flex" ng-repeat="order in ordersList">
+                    <td class="col-2">{{order.id}}</td>
+                    <td class="col-2">{{order.creationDateTime}}</td>
+                    <td class="col-1">{{order.totalSum}}</td>
+                    <td class="col-7">
+                        [Развернуть]
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
 
         <!--    <br>-->
         <!--    <br>-->

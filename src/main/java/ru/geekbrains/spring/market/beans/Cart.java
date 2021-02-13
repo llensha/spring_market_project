@@ -23,7 +23,7 @@ public class Cart {
 
     private final ProductService productService;
     private List<OrderItem> items;
-    private int totalSumma;
+    private int totalSum;
 
     @PostConstruct
     public void init() {
@@ -31,36 +31,33 @@ public class Cart {
     }
 
     public void addToCart(Long id) {
-        for (OrderItem o : items) {
-            if (o.getProduct().getId().equals(id)) {
-                o.incrementQuantity();
-                recalculate();
-                return;
-            }
+        if (!incQuantity(id)) {
+            Product product = productService.findProductById(id)
+                    .orElseThrow(() -> new ResourceNotFoundException("Не удалось найти продукт с id = " + id + "при добавлении в корзину"));
+            OrderItem orderItem = new OrderItem(product);
+            items.add(orderItem);
+            recalculate();
         }
-        Product product = productService.findProductById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Не удалось найти продукт с id = " + id + "при добавлении в корзину"));
-        OrderItem orderItem = new OrderItem(product);
-        items.add(orderItem);
-        recalculate();
     }
 
     public void recalculate() {
-        totalSumma = 0;
+        totalSum = 0;
         for (OrderItem o : items) {
-            totalSumma += o.getSumma();
+            totalSum += o.getSum();
         }
     }
 
-    public void incQuantity(Long id) {
+    public boolean incQuantity(Long id) {
         for (OrderItem o : items) {
             if (o.getId().equals(id)) {
                 o.incrementQuantity();
                 recalculate();
-                return;
+                return true;
             }
         }
+        return false;
     }
+
     public void decQuantity(Long id) {
         for (OrderItem o : items) {
             if (o.getId().equals(id)) {
@@ -76,13 +73,8 @@ public class Cart {
     }
 
     public void deleteFromCart(Long id) {
-        for (OrderItem o : items) {
-            if (o.getId().equals(id)) {
-                items.remove(o);
-                recalculate();
-                return;
-            }
-        }
+        items.removeIf(oi -> oi.getId().equals(id));
+        recalculate();
     }
 
     public void deleteAll() {

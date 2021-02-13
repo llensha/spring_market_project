@@ -34,26 +34,59 @@ angular.module('market', []).controller('indexController', function ($scope, $ht
         return arr;
     }
 
-    $scope.submitCreateNewProduct = function() {
-        $http.post(contextPath + '/api/v1/products', $scope.newProduct)
-            .then(function (response) {
-                $scope.newProduct = null;
-                $scope.fillTable();
-            });
-    };
+    // $scope.submitCreateNewProduct = function() {
+    //     $http.post(contextPath + '/api/v1/products', $scope.newProduct)
+    //         .then(function (response) {
+    //             $scope.newProduct = null;
+    //             $scope.fillTable();
+    //         });
+    // };
 
-    $scope.deleteProductById = function(productId) {
-        $http.delete(contextPath + '/api/v1/products/' + productId)
-        .then(function (response) {
-            $scope.fillTable();
-        });
-    };
+    // $scope.deleteProductById = function(productId) {
+    //     $http.delete(contextPath + '/api/v1/products/' + productId)
+    //     .then(function (response) {
+    //         $scope.fillTable();
+    //     });
+    // };
 
     $scope.showCart = function() {
         $http.get(contextPath + '/api/v1/cart')
             .then(function(response) {
                 $scope.cartList = response.data;
             });
+    };
+
+    $scope.showOrders = function() {
+        $http.get(contextPath + '/api/v1/orders')
+            .then(function(response) {
+                $scope.ordersList = response.data;
+            });
+    };
+
+    $scope.tryToAuth = function() {
+        $http.post(contextPath + '/auth', $scope.user)
+            .then(function successCallback(response) {
+                if (response.data.token) {
+                    $http.defaults.headers.common.Authorization = 'Bearer ' + response.data.token;
+                    // $scope.user.username = null;
+                    $scope.user.password = null;
+                    $scope.authorized = true;
+                    $scope.fillTable();
+                    $scope.showCart();
+                    $scope.showOrders();
+                }
+            }, function errorCallback(response) {
+                window.alert("Ошибка авторизации");
+            });
+    };
+
+    $scope.tryToLogout = function() {
+        $http.defaults.headers.common.Authorization = '';
+        $scope.user.username = null;
+        $scope.authorized = false;
+        $scope.fillTable();
+        $scope.showCart();
+        $scope.showOrders();
     };
 
     $scope.addToCart = function(productId) {
@@ -91,26 +124,17 @@ angular.module('market', []).controller('indexController', function ($scope, $ht
             });
     };
 
-    $scope.tryToAuth = function() {
-        $http.post(contextPath + '/auth', $scope.user)
-            .then(function successCallback(response) {
-                if (response.data.token) {
-                    $http.defaults.headers.common.Authorization = 'Bearer ' + response.data.token;
-                    // $scope.user.username = null;
-                    $scope.user.password = null;
-                    $scope.authorized = true;
-                }
-            }, function errorCallback(response) {
-                window.alert("Ошибка авторизации");
+    $scope.checkout = function() {
+        $http.get(contextPath + '/api/v1/orders/checkout')
+            .then(function(response) {
+                $scope.showOrders();
+                $scope.showCart();
             });
     };
 
-    $scope.tryToLogout = function() {
-        $http.defaults.headers.common.Authorization = '';
-        $scope.user.username = null;
-        $scope.authorized = false;
-    };
 
     $scope.fillTable();
-    $scope.showCart();
+    // $scope.showCart();
+    // $scope.showOrders();
+
 });

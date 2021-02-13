@@ -20,6 +20,10 @@ public class OrderItem {
     private Long id;
 
     @ManyToOne
+    @JoinColumn(name = "order_id")
+    private Order order;
+
+    @ManyToOne
     @JoinColumn(name = "product_id")
     private Product product;
 
@@ -29,8 +33,8 @@ public class OrderItem {
     @Column(name = "price")
     private int price;
 
-    @Column(name = "summa")
-    private int summa;
+    @Column(name = "sum")
+    private int sum;
 
     @Column(name = "created_at")
     @CreationTimestamp
@@ -45,17 +49,17 @@ public class OrderItem {
         this.product = product;
         this.quantity = 1;
         this.price = product.getPrice();
-        this.summa = this.price;
+        this.sum = this.price;
     }
 
     public void incrementQuantity() {
         quantity++;
-        summa = quantity * price;
+        sum = quantity * price;
     }
 
     public void decrementQuantity() {
         quantity--;
-        summa = quantity * price;
+        sum = quantity * price;
     }
 
 }
