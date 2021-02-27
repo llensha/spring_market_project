@@ -4,8 +4,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-import ru.geekbrains.spring.market.beans.Cart;
-import ru.geekbrains.spring.market.dto.CartDto;
 import ru.geekbrains.spring.market.dto.OrderDto;
 import ru.geekbrains.spring.market.exceptions_handling.ResourceNotFoundException;
 import ru.geekbrains.spring.market.models.User;
@@ -30,10 +28,10 @@ public class OrderController {
         return orderService.findAll(principal.getName()).stream().map(OrderDto::new).collect(Collectors.toList());
     }
 
-    @PostMapping("/checkout")
+    @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public void checkout(Principal principal, @RequestBody OrderDto orderDto) {
-        User user = userService.findByUsername(principal.getName()).orElseThrow(() -> new ResourceNotFoundException("Такой пользователь не найден при оформлении заказа"));
-        orderService.createOrderFromCart(user, orderDto.getAddress());
+    public void checkout(Principal principal, @RequestParam String address) {
+        User user = userService.findByUsername(principal.getName()).orElseThrow(() -> new ResourceNotFoundException("Пользователь не найден при оформлении заказа"));
+        orderService.createOrderFromCart(user, address);
     }
 }

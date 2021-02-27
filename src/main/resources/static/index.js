@@ -145,8 +145,13 @@ angular.module('market', []).controller('indexController', function ($scope, $ht
     };
 
     $scope.checkout = function() {
-        $http.post(contextPath + '/api/v1/orders/checkout', $scope.newOrder)
-            .then(function(response) {
+        $http({
+            url: contextPath + '/api/v1/orders',
+            method: 'POST',
+            params: {
+                address: $scope.newOrder.address
+            }
+        }).then(function(response) {
                 $scope.isAddressForm = false;
                 $scope.newOrder = null;
                 $scope.showOrders();
