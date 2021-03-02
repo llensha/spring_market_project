@@ -8,60 +8,47 @@ import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.springframework.stereotype.Component;
 
-import java.util.HashMap;
+import javax.annotation.PostConstruct;
+import java.util.Collections;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 @Aspect
 @Slf4j
 @Component
 public class AppAspect {
     
-    public static Map<String, Integer> countMethods = new HashMap<>();
-    public static Map<String, Long> countControllers = new HashMap<>();
+    private Map<String, Long> countMethods;
+    private Map<String, Long> countControllers;
 
+    @PostConstruct
+    public void init() {
+        countMethods = new ConcurrentHashMap<>();
+        countControllers = new ConcurrentHashMap<>();
+    }
 
-    @Before("execution(* ru.geekbrains.spring.market.controllers.*.*(..))")
-    public void beforeAnyMethodWithDetails(JoinPoint joinPoint) {
-        String methodName = joinPoint.getSignature().getName();
-        if (countMethods.containsKey(methodName)) {
-            countMethods.replace(methodName, countMethods.get(methodName) + 1);
-        } else {
-            countMethods.put(methodName, 1);
-        }
-        log.info(countMethods.toString());
-        int maxValue = 0;
-        StringBuilder maxMethodName = new StringBuilder();
-        for (Map.Entry<String, Integer> item : countMethods.entrySet()) {
-            if (item.getValue() > maxValue) {
-                maxValue = item.getValue();
-                maxMethodName.replace(0, maxMethodName.length(), item.getKey());
-            }
-        }
-        log.info("Наиболее частый метод: " + maxMethodName);
+    public Map<String, Long> getCountMethods() {
+        return Collections.unmodifiableMap(countMethods);
+    }
+
+    public Map<String, Long> getCountControllers() {
+        return Collections.unmodifiableMap(countControllers);
+    }
+
+    @Before("execution(public * ru.geekbrains.spring.market..*(..))")
+    public void countMethodUsages(JoinPoint joinPoint) {
+        String methodName = joinPoint.getSignature().getDeclaringType().getSimpleName() + '.' + joinPoint.getSignature().getName();
+        countMethods.put(methodName, countMethods.getOrDefault(methodName, 0L) + 1L);
     }
 
     @Around("execution(* ru.geekbrains.spring.market.controllers.*.*(..))")
-    public Object methodProfiling(ProceedingJoinPoint proceedingJoinPoint) throws Throwable {
-        long begin = System.currentTimeMillis();
+    public Object countDurationOfMethodsInControllers(ProceedingJoinPoint proceedingJoinPoint) throws Throwable {
+        long startTime = System.currentTimeMillis();
         Object out = proceedingJoinPoint.proceed();
-        long end = System.currentTimeMillis();
-        long duration = end - begin;
-        String controllerName = proceedingJoinPoint.getSignature().getDeclaringTypeName();
-        if (countControllers.containsKey(controllerName)) {
-            countControllers.replace(controllerName, countControllers.get(controllerName) + duration);
-        } else {
-            countControllers.put(controllerName, duration);
-        }
-        log.info(countControllers.toString());
-        Long maxValue = 0L;
-        StringBuilder maxControllerName = new StringBuilder();
-        for (Map.Entry<String, Long> item : countControllers.entrySet()) {
-            if (item.getValue() > maxValue) {
-                maxValue = item.getValue();
-                maxControllerName.replace(0, maxControllerName.length(), item.getKey());
-            }
-        }
-        log.info("Дольше всего выполняются методы: " + maxControllerName);
+        long endTime = System.currentTimeMillis();
+        long executionTime = endTime - startTime;
+        String controllerName = proceedingJoinPoint.getSignature().getDeclaringType().getSimpleName();
+        countControllers.put(controllerName, countControllers.getOrDefault(controllerName, 0L) + executionTime);
         return out;
     }
 

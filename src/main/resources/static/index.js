@@ -159,6 +159,12 @@ angular.module('market', []).controller('indexController', function ($scope, $ht
             });
     };
 
+    $scope.showStatistics = function() {
+        $http.get(contextPath + '/api/v1/statistics')
+            .then(function(response) {
+                $scope.statistics = response.data;
+            });
+    };
 
     $scope.fillTable();
 

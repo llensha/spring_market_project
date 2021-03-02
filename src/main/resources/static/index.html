@@ -207,7 +207,13 @@
                 </tbody>
             </table>
         </div>
-
+        <div class="statistics">
+            <label>Перечень используемых методов в порядке убывания количества вызовов:</label>
+            <p ng-repeat="item in statistics.countMethods">{{item}}</p>
+            <br>
+            <label>Перечень контроллеров в порядке убывания времени в миллисекундах, затраченного на выполнение всех его методов:</label>
+            <p ng-repeat="item in statistics.countControllers">{{item}}</p>
+        </div>
 
         <!--    <br>-->
         <!--    <br>-->
@@ -229,7 +235,10 @@
     </div>
 
     <footer style="min-height: 50px; display: flex; align-items: center; margin-top: 15px; padding: 15px; background-color: cadetblue; color: white">
-        <p style="margin-bottom: 0px; opacity: 0.4;">2021 © GeekBrains</p>
+        <div style="display: flex; flex: auto; justify-content: space-between; opacity: 0.4;">
+            <label style="margin-bottom: 0px">2021 © GeekBrains</label>
+            <a href="#" class="showStatistics" ng-click="showStatistics()" style="text-decoration: underline; color: white;">Статистика</a>
+        </div>
     </footer>
 
 </div>
