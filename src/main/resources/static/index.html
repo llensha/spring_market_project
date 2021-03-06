@@ -17,9 +17,10 @@
 
 <div style="min-height: 100vh; display: flex; flex-direction: column;">
     <div class="top" style="flex-grow: 1">
+
         <div ng-controller="indexController">
             <nav class="navbar navbar-expand-lg navbar-dark bg-primary" style="margin-bottom: 25px">
-                <div class="container container-fluid">
+                <div class="container">
                     <a class="navbar-brand" href="#!/" style="font-size: 45px; font-weight: 600;">My Market</a>
                     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                         <span class="navbar-toggler-icon"></span>
@@ -29,20 +30,20 @@
                             <li class="nav-item">
                                 <a class="nav-link" href="#!/products" style="color: white;">Каталог</a>
                             </li>
-                            <li class="nav-item" style="padding-left: 15px">
-                                <a class="nav-link" href="#!/orders" ng-if="isUserLoggedIn()" style="color: white;">Заказы</a>
+                            <li class="nav-item" ng-if="isUserLoggedIn()" style="padding-left: 15px">
+                                <a class="nav-link" href="#!/orders" style="color: white;">Заказы</a>
                             </li>
                             <li class="nav-item" style="padding-left: 15px">
                                 <a class="nav-link" href="#!/cart" style="color: white;">Корзина</a>
                             </li>
-                            <li class="nav-item" style="padding-left: 15px" ng-if="!isUserLoggedIn()">
+                            <li class="nav-item" ng-if="!isUserLoggedIn()" style="padding-left: 15px">
                                 <a class="nav-link" href="#!/authorization" style="color: white;">Войти</a>
                             </li>
-                            <li class="nav-item" style="padding-left: 15px" ng-if="isUserLoggedIn()">
+                            <li class="nav-item" ng-if="isUserLoggedIn()" style="padding-left: 15px">
                                 <img src="images/user.ico" alt="user_ico">
-                                <span style="margin-bottom: 0px;" style="color: white;">{{currentUserName}}</span>
+                                <span style="margin-bottom: 0px; color: white;">{{currentUserName}}</span>
                             </li>
-                            <li class="nav-item" style="padding-left: 15px" ng-if="isUserLoggedIn()">
+                            <li class="nav-item" ng-if="isUserLoggedIn()" style="padding-left: 15px">
                                 <a class="nav-link" href="#!/" ng-click="tryToLogout()" style="color: white;">Выйти</a>
                             </li>
                         </ul>
@@ -50,8 +51,8 @@
                 </div>
             </nav>
         </div>
-    <ng-view></ng-view>
 
+    <ng-view></ng-view>
 
     </div>
 
@@ -65,13 +66,13 @@
 
 <script src="index.js"></script>
 <script src="authorization/authorization.js"></script>
+<script src="registration/registration.js"></script>
 <script src="home/home.js"></script>
 <script src="products/products.js"></script>
 <script src="cart/cart.js"></script>
 <script src="order_confirmation/order_confirmation.js"></script>
 <script src="order_result/order_result.js"></script>
 <script src="orders/orders.js"></script>
-<script src="registration/registration.js"></script>
 <script src="statistics/statistics.js"></script>
 
 </body>
