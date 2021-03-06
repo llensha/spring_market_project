@@ -9,7 +9,7 @@ import ru.geekbrains.spring.market.dto.ProductDto;
 import ru.geekbrains.spring.market.exceptions_handling.ResourceNotFoundException;
 import ru.geekbrains.spring.market.models.Product;
 import ru.geekbrains.spring.market.repositories.ProductRepository;
-import ru.geekbrains.spring.market.soap.ProductSoap;
+import ru.geekbrains.spring.market.soap.products.ProductSoap;
 
 import java.util.List;
 import java.util.Optional;

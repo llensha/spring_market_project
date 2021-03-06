@@ -6,4 +6,4 @@
 //
 
 @javax.xml.bind.annotation.XmlSchema(namespace = "http://www.market.ru/spring/ws/products", elementFormDefault = javax.xml.bind.annotation.XmlNsForm.QUALIFIED)
-package ru.geekbrains.spring.market.soap;
+package ru.geekbrains.spring.market.soap.products;

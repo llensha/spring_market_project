@@ -6,7 +6,7 @@
 //
 
 
-package ru.geekbrains.spring.market.soap;
+package ru.geekbrains.spring.market.soap.products;
 
 import javax.xml.bind.annotation.XmlRegistry;
 
