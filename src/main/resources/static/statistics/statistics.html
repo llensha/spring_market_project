@@ -1,0 +1,7 @@
+<div class="statistics container">
+    <h6>Перечень используемых методов в порядке убывания количества вызовов:</h6>
+    <p ng-repeat="item in statistics.countMethods">{{item}}</p>
+    <br>
+    <h6>Перечень контроллеров в порядке убывания времени в миллисекундах, затраченного на выполнение всех его методов:</h6>
+    <p ng-repeat="item in statistics.countControllers">{{item}}</p>
+</div>

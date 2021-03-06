@@ -9,238 +9,70 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
 
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.0/angular.min.js"></script>
-    <script src="index.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.0/angular-route.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ngStorage/0.3.11/ngStorage.min.js"></script>
 </head>
 
 <body>
 
-<div class="container" ng-controller="indexController" style="min-height: 100vh; display: flex; flex-direction: column;">
+<div style="min-height: 100vh; display: flex; flex-direction: column;">
     <div class="top" style="flex-grow: 1">
-        <header style="min-height: 100px; display: flex; justify-content: space-between; align-items: center; background-color: cornflowerblue; text-decoration-color: white; color: white">
-            <h1 style="margin-left: 25px">My Market</h1>
-            <div class="sign-in" ng-show="!authorized" style="text-align: right;">
-                <a href="#" class="registration" ng-click="showRegistrationForm()" style="text-decoration: underline; color: white; margin-right: 20px;">Регистрация</a>
-                <form class="form-signin" ng-submit="tryToAuth()" style="padding: 15px;">
-                    <div class="form-group row" style="margin-right: -50px; margin-bottom: -15px;">
-                        <div class="col-md-5" style="padding-left: 0px;">
-                            <input type="text" ng-model="user.username" id="inputUsername" class="form-control form-control-sm"
-                                   placeholder="Имя пользователя" style="margin-bottom: 10px;" required="">
-                        </div>
-                        <div class="col-md-4" style="padding-left: 0px;">
-                            <input type="password" ng-model="user.password" id="inputPassword" class="form-control form-control-sm" placeholder="Пароль"
-                                   style="margin-bottom: 10px;" required="">
-                        </div>
-                        <div class="col-md-2" style="padding-left: 0px;">
-                            <button class="btn btn-sm btn-outline-light btn-block" type="submit">Войти</button>
-                        </div>
-                    </div>
-                </form>
-            </div>
-
-            <div class="row align-items-center" ng-show="authorized" style="margin-right: 15px; margin-bottom: -15px;">
-                <div class="col-md-auto">
-                    <img src="images/user.ico" alt="user_ico">
-                    <label style="margin-bottom: 0px;">{{user.username}}</label>
-                </div>
-                <div class="col-md-2" style="max-width: 100%;">
-                    <button class="btn btn-sm btn-outline-light" ng-click="tryToLogout()">Выйти</button>
-                </div>
-            </div>
-        </header>
-
-        <form class="form-registration" ng-show="isRegistrationForm" ng-submit="registry()" style="margin-top: 25px">
-            <div class="col-md-3" style="margin-bottom: 15px">
-                <label for="newUsername">Имя пользователя</label>
-                <input class="form-control" type="text" ng-model="newUser.username" id="newUsername" required="required">
-            </div>
-            <div class="col-md-3" style="margin-bottom: 15px">
-                <label for="newUserPassword">Пароль</label>
-                <input class="form-control" type="password" ng-model="newUser.password" id="newUserPassword" required="required">
-            </div>
-            <div class="col-md-3" style="margin-bottom: 15px">
-                <label for="newUserEmail">Email</label>
-                <input class="form-control" type="email" ng-model="newUser.email" id="newUserEmail" required="required">
-            </div>
-            <div class="col-md-3">
-                <button class="btn btn-success" style="margin-top: 10px;" type="submit">Сохранить</button>
-            </div>
-        </form>
-
-        <div class="main" ng-show="!isRegistrationForm">
-            <h5 style="margin-top: 15px">Фильтр</h5>
-            <form novalidate ng-submit="fillTable()">
-                <div class="form-group row">
-                    <div class="form-group col-md-3">
-                        <label for="filterTitle" class="col-form-label col-form-label-sm">Название товара</label>
-                        <input class="form-control form-control-sm" type="text" ng-model="filter.title" id="filterTitle">
-                    </div>
-                    <div class="form-group col-md-3">
-                        <label for="filterMinPrice" class="col-form-label col-form-label-sm">Минимальная цена</label>
-                        <input class="form-control form-control-sm" type="number" min="0" ng-model="filter.min_price" id="filterMinPrice">
-                    </div>
-                    <div class="form-group col-md-3">
-                        <label for="filterMaxPrice" class="col-form-label col-form-label-sm">Максимальная цена</label>
-                        <input class="form-control form-control-sm" type="number" min="0" ng-model="filter.max_price" id="filterMaxPrice">
-                    </div>
-                    <div class="form-group col-md-3">
-                        <label for="buttonSubmit"></label><br>
-                        <button class="btn btn-primary" type="submit" id="buttonSubmit">Применить</button>
+        <div ng-controller="indexController">
+            <nav class="navbar navbar-expand-lg navbar-dark bg-primary" style="margin-bottom: 25px">
+                <div class="container container-fluid">
+                    <a class="navbar-brand" href="#!/" style="font-size: 45px; font-weight: 600;">My Market</a>
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="collapse navbar-collapse" id="navbarSupportedContent" style="justify-content: flex-end;">
+                        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                            <li class="nav-item">
+                                <a class="nav-link" href="#!/products" style="color: white;">Каталог</a>
+                            </li>
+                            <li class="nav-item" style="padding-left: 15px">
+                                <a class="nav-link" href="#!/orders" ng-if="isUserLoggedIn()" style="color: white;">Заказы</a>
+                            </li>
+                            <li class="nav-item" style="padding-left: 15px">
+                                <a class="nav-link" href="#!/cart" style="color: white;">Корзина</a>
+                            </li>
+                            <li class="nav-item" style="padding-left: 15px" ng-if="!isUserLoggedIn()">
+                                <a class="nav-link" href="#!/authorization" style="color: white;">Войти</a>
+                            </li>
+                            <li class="nav-item" style="padding-left: 15px" ng-if="isUserLoggedIn()">
+                                <img src="images/user.ico" alt="user_ico">
+                                <span style="margin-bottom: 0px;" style="color: white;">{{currentUserName}}</span>
+                            </li>
+                            <li class="nav-item" style="padding-left: 15px" ng-if="isUserLoggedIn()">
+                                <a class="nav-link" href="#!/" ng-click="tryToLogout()" style="color: white;">Выйти</a>
+                            </li>
+                        </ul>
                     </div>
                 </div>
-            </form>
-
-            <h3>Список товаров</h3>
-            <table class="table table-hover table-sm" cellpadding="0" cellspacing="0">
-                <thead class="table-primary">
-                <tr class="d-flex">
-                    <th class="col-5">Название</th>
-                    <th class="col-2">Цена</th>
-                    <th class="col-2"></th>
-                    <!--            <td></td>-->
-                </tr>
-                </thead>
-                <tbody>
-                <tr class="d-flex" ng-repeat="product in productsPage.content" style="height: 40px">
-                    <td class="col-5">{{product.title}}</td>
-                    <td class="col-2">{{product.price}}</td>
-                    <td class="col-2">
-                        <button class="btn btn-link btn-sm" ng-show="authorized" ng-click="addToCart(product.id)" style="margin: 0px; padding: 0px">
-                            <img src="images/cart.ico" alt="add">
-                        </button>
-                    </td>
-                    <!--            <td>-->
-                    <!--                <button class="btn btn-danger" ng-click="deleteProductById(product.id)">Удалить товар</button>-->
-                    <!--            </td>-->
-                </tr>
-                </tbody>
-            </table>
-
-            <nav aria-label="Page navigation">
-                <ul class="pagination pagination-sm">
-                    <li ng-class="productsPage.first ? 'page-item disabled' : 'page-item'">
-                        <a class="page-link" ng-click="fillTable(productsPage.number)">Пред.</a>
-                    </li>
-                    <li ng-class="productsPage.number == pageIndex - 1 ? 'page-item active' : 'page-item'" ng-repeat = "pageIndex in paginationArray">
-                        <a class="page-link" ng-click="fillTable(pageIndex)">{{pageIndex}}</a>
-                    </li>
-                    <li ng-class="productsPage.last ? 'page-item disabled' : 'page-item'">
-                        <a class="page-link" ng-click="fillTable(productsPage.number + 2)">След.</a>
-                    </li>
-                </ul>
             </nav>
         </div>
+    <ng-view></ng-view>
 
 
-        <div class="cart" ng-show="authorized && cartList.totalSum>0 && !isAddressForm" style="margin-top: 25px">
-            <h4>Корзина</h4>
-            <table class="table table-sm" cellpadding="0" cellspacing="0">
-                <thead class="table-primary">
-                <tr class="d-flex">
-                    <th class="col-5">Название</th>
-                    <th class="col-2">Цена</th>
-                    <th class="col-2">Количество</th>
-                    <th class="col-2">Сумма</th>
-                    <th class="col-1"></th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr class="d-flex" ng-repeat="orderItem in cartList.items" style="height: 40px">
-                    <td class="col-5">{{orderItem.productTitle}}</td>
-                    <td class="col-2">{{orderItem.price}}</td>
-                    <td class="col-2">
-                        <button class="btn btn-outline-secondary btn-sm mr-md-3" ng-click="decQuantity(orderItem.id)"> - </button>
-                        <label> {{orderItem.quantity}} </label>
-                        <button class="btn btn-outline-secondary btn-sm ml-md-3" ng-click="incQuantity(orderItem.id)"> + </button>
-                    </td>
-                    <td class="col-2">{{orderItem.sum}}</td>
-                    <td class="col-1">
-                        <button class="btn btn-link btn-sm" ng-click="deleteProductFromCart(orderItem.id)" style="margin: 0px; padding: 0px">
-                            <img src="images/basket.ico" alt="delete">
-                        </button>
-                    </td>
-                </tr>
-                <tr class="table-info d-flex">
-                    <td class="col-5"><b>Итого</b></td>
-                    <td class="col-2"></td>
-                    <td class="col-2"></td>
-                    <td class="col-2"><b>{{cartList.totalSum}}</b></td>
-                    <td class="col-1"></td>
-                </tr>
-                </tbody>
-            </table>
-            <div style="display: flex; justify-content: space-between">
-                <button class="btn btn-success" ng-click="showAddressForm()">Оформить заказ</button>
-                <button class="btn btn-danger" ng-click="deleteAllProductsFromCart()">Очистить корзину</button>
-            </div>
-        </div>
-
-        <form class="form-address" ng-show="isAddressForm" ng-submit="checkout()" style="margin-top: 25px">
-            <div class="col-md-9" style="margin-bottom: 15px">
-                <label for="address">Укажите адрес доставки</label>
-                <input class="form-control" type="text" ng-model="newOrder.address" id="address" required="required">
-            </div>
-            <div class="col-md-3">
-                <button class="btn btn-success" style="margin-top: 10px;" type="submit">Сохранить</button>
-            </div>
-        </form>
-
-        <div class="orders" ng-show="authorized && !isAddressForm" style="margin-top: 25px">
-            <h3>Мои заказы</h3>
-            <table class="table table-hover table-sm" cellpadding="0" cellspacing="0">
-                <thead class="table-primary">
-                <tr class="d-flex">
-                    <th class="col-2">Номер заказа</th>
-                    <th class="col-2">Дата</th>
-                    <th class="col-1">Сумма</th>
-                    <th class="col-7"> </th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr class="d-flex" ng-repeat="order in ordersList">
-                    <td class="col-2">{{order.id}}</td>
-                    <td class="col-2">{{order.creationDateTime}}</td>
-                    <td class="col-1">{{order.totalSum}}</td>
-                    <td class="col-7">
-                        [Развернуть]
-                    </td>
-                </tr>
-                </tbody>
-            </table>
-        </div>
-        <div class="statistics">
-            <label>Перечень используемых методов в порядке убывания количества вызовов:</label>
-            <p ng-repeat="item in statistics.countMethods">{{item}}</p>
-            <br>
-            <label>Перечень контроллеров в порядке убывания времени в миллисекундах, затраченного на выполнение всех его методов:</label>
-            <p ng-repeat="item in statistics.countControllers">{{item}}</p>
-        </div>
-
-        <!--    <br>-->
-        <!--    <br>-->
-        <!--    <br>-->
-        <!--    <h4>Добавить новый товар</h4>-->
-        <!--    <form novalidate ng-submit="submitCreateNewProduct()">-->
-<!--                <div class="form-group col-md-3">-->
-<!--                    <label for="newProductTitle">Название</label>-->
-<!--                    <input class="form-control" type="text" ng-model="newProduct.title" id="newProductTitle">-->
-<!--                </div>-->
-<!--                <div class="form-group col-md-3">-->
-<!--                    <label for="newProductPrice">Цена</label>-->
-<!--                    <input class="form-control" type="number" min="0" ng-model="newProduct.price" id="newProductPrice">-->
-<!--                </div>-->
-<!--                <div>-->
-<!--                    <button class="btn btn-success" type="submit">Сохранить</button>-->
-<!--                </div>-->
-        <!--    </form>-->
     </div>
 
     <footer style="min-height: 50px; display: flex; align-items: center; margin-top: 15px; padding: 15px; background-color: cadetblue; color: white">
-        <div style="display: flex; flex: auto; justify-content: space-between; opacity: 0.4;">
-            <label style="margin-bottom: 0px">2021 © GeekBrains</label>
-            <a href="#" class="showStatistics" ng-click="showStatistics()" style="text-decoration: underline; color: white;">Статистика</a>
+        <div class="container" style="display: flex; flex: auto; justify-content: space-between; opacity: 0.4;">
+            <label style="margin-bottom: 0px">2021 &copy; GeekBrains</label>
+            <a href="#!/statistics" class="showStatistics" style="text-decoration: underline; color: white;">Статистика</a>
         </div>
     </footer>
-
 </div>
+
+<script src="index.js"></script>
+<script src="authorization/authorization.js"></script>
+<script src="home/home.js"></script>
+<script src="products/products.js"></script>
+<script src="cart/cart.js"></script>
+<script src="order_confirmation/order_confirmation.js"></script>
+<script src="order_result/order_result.js"></script>
+<script src="orders/orders.js"></script>
+<script src="registration/registration.js"></script>
+<script src="statistics/statistics.js"></script>
+
 </body>
 </html>

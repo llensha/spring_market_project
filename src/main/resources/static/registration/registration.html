@@ -1,0 +1,19 @@
+<div class="container">
+    <form class="form-registration" ng-submit="registry()">
+        <div class="col-md-3" style="margin-bottom: 15px">
+            <label for="newUsername">Имя пользователя</label>
+            <input class="form-control" type="text" ng-model="newUser.username" id="newUsername" required="required">
+        </div>
+        <div class="col-md-3" style="margin-bottom: 15px">
+            <label for="newUserPassword">Пароль</label>
+            <input class="form-control" type="password" ng-model="newUser.password" id="newUserPassword" required="required">
+        </div>
+        <div class="col-md-3" style="margin-bottom: 15px">
+            <label for="newUserEmail">Email</label>
+            <input class="form-control" type="email" ng-model="newUser.email" id="newUserEmail" required="required">
+        </div>
+        <div class="col-md-3">
+            <button class="btn btn-success" style="margin-top: 10px;" type="submit">Сохранить</button>
+        </div>
+    </form>
+</div>

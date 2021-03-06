@@ -23,6 +23,7 @@ public class OrderDto {
         this.id = order.getId();
         this.totalSum = order.getTotalSum();
         this.creationDateTime = order.getCreatedAt().format(DateTimeFormatter.ofPattern("dd.MM.yyyy kk:mm"));
+        this.address = order.getAddress();
         this.username = order.getUser().getUsername();
         this.items = order.getItems().stream().map(OrderItemDto::new).collect(Collectors.toList());
     }

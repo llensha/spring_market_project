@@ -1,0 +1,16 @@
+<div class="container">
+    <form class="form-signin" ng-submit="tryToAuth()" style="margin-bottom: 25px;">
+        <div class="col-md-3" style="margin-bottom: 15px">
+            <label for="inputUsername">Имя пользователя</label>
+            <input class="form-control" type="text" ng-model="user.username" id="inputUsername" required="required">
+        </div>
+        <div class="col-md-3" style="margin-bottom: 15px">
+            <label for="inputPassword">Пароль</label>
+            <input class="form-control" type="password" ng-model="user.password" id="inputPassword" required="required">
+        </div>
+        <div class="col-md-3">
+            <button class="btn btn-primary" type="submit">Войти</button>
+        </div>
+    </form>
+    <a href="#!/registration" class="registration" style="padding-left: 15px">Зарегистрироваться</a>
+</div>

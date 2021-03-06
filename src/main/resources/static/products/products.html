@@ -1,0 +1,42 @@
+<div class="container">
+    <h3>Список товаров</h3>
+    <table class="table table-hover table-sm" cellpadding="0" cellspacing="0">
+        <thead class="table-primary">
+        <tr class="d-flex">
+            <th class="col-5">Название</th>
+            <th class="col-2">Цена</th>
+            <th class="col-2"></th>
+            <!--            <td></td>-->
+        </tr>
+        </thead>
+        <tbody>
+        <tr class="d-flex" ng-repeat="product in productsPage.content" style="height: 40px">
+            <td class="col-5">{{product.title}}</td>
+            <td class="col-2">{{product.price}}</td>
+            <td class="col-2">
+                <button class="btn btn-link btn-sm" ng-click="addToCart(product.id)" style="margin: 0px; padding: 0px">
+                    <img src="images/cart.ico" alt="add">
+                </button>
+            </td>
+            <!--            <td>-->
+            <!--                <button class="btn btn-danger" ng-click="deleteProductById(product.id)">Удалить товар</button>-->
+            <!--            </td>-->
+        </tr>
+        </tbody>
+    </table>
+
+    <nav aria-label="Page navigation">
+        <ul class="pagination pagination-sm">
+            <li ng-class="productsPage.first ? 'page-item disabled' : 'page-item'">
+                <a class="page-link" ng-click="showProductsPage(productsPage.number)">Пред.</a>
+            </li>
+            <li ng-class="productsPage.number == pageIndex - 1 ? 'page-item active' : 'page-item'" ng-repeat = "pageIndex in paginationArray">
+                <a class="page-link" ng-click="showProductsPage(pageIndex)">{{pageIndex}}</a>
+            </li>
+            <li ng-class="productsPage.last ? 'page-item disabled' : 'page-item'">
+                <a class="page-link" ng-click="showProductsPage(productsPage.number + 2)">След.</a>
+            </li>
+        </ul>
+    </nav>
+
+</div>

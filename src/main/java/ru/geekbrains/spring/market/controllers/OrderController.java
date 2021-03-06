@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import ru.geekbrains.spring.market.dto.OrderDto;
 import ru.geekbrains.spring.market.exceptions_handling.ResourceNotFoundException;
+import ru.geekbrains.spring.market.models.Order;
 import ru.geekbrains.spring.market.models.User;
 import ru.geekbrains.spring.market.services.OrderService;
 import ru.geekbrains.spring.market.services.UserService;
@@ -25,13 +26,19 @@ public class OrderController {
 
     @GetMapping
     public List<OrderDto> findAll(Principal principal) {
-        return orderService.findAll(principal.getName()).stream().map(OrderDto::new).collect(Collectors.toList());
+        User user = userService.findByUsername(principal.getName()).orElseThrow(() -> new ResourceNotFoundException("Пользователь не найден при вызове списка заказов"));
+        return orderService.findAll(user.getUsername()).stream().map(OrderDto::new).collect(Collectors.toList());
+    }
+
+    @GetMapping("/{id}")
+    public OrderDto findOrderById(@PathVariable Long id) {
+        return orderService.findOrderById(id).orElseThrow(() -> new ResourceNotFoundException(String.format("Заказ с id = %d не найден при оформлении заказа", id)));
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public void checkout(Principal principal, @RequestParam String address) {
+    public OrderDto checkout(Principal principal, @RequestParam String address) {
         User user = userService.findByUsername(principal.getName()).orElseThrow(() -> new ResourceNotFoundException("Пользователь не найден при оформлении заказа"));
-        orderService.createOrderFromCart(user, address);
+        return orderService.createOrderFromCart(user, address);
     }
 }
