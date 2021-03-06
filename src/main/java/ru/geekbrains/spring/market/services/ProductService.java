@@ -9,8 +9,12 @@ import ru.geekbrains.spring.market.dto.ProductDto;
 import ru.geekbrains.spring.market.exceptions_handling.ResourceNotFoundException;
 import ru.geekbrains.spring.market.models.Product;
 import ru.geekbrains.spring.market.repositories.ProductRepository;
+import ru.geekbrains.spring.market.soap.products.ProductSoap;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -45,6 +49,22 @@ public class ProductService {
     public void deleteProductById(Long id) {
         productRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Продукт с id = " + id + " не найден"));
         productRepository.deleteById(id);
+    }
+
+    public static final Function<Product, ProductSoap> functionEntityToSoap = p -> {
+        ProductSoap ps = new ProductSoap();
+        ps.setId(p.getId());
+        ps.setTitle(p.getTitle());
+        ps.setPrice(p.getPrice());
+        return ps;
+    };
+
+    public List<ProductSoap> getAllProducts() {
+        return productRepository.findAll().stream().map(functionEntityToSoap).collect(Collectors.toList());
+    }
+
+    public ProductSoap getById(Long id) {
+        return productRepository.findById(id).map(functionEntityToSoap).orElseThrow(() -> new ResourceNotFoundException("Продукт с id = " + id + " не найден"));
     }
 
 }
