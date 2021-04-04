@@ -1,47 +1,56 @@
 package ru.geekbrains.spring.market.controllers;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-import ru.geekbrains.spring.market.beans.Cart;
+import org.springframework.web.bind.annotation.*;
 import ru.geekbrains.spring.market.dto.CartDto;
+import ru.geekbrains.spring.market.exceptions_handling.ResourceNotFoundException;
+import ru.geekbrains.spring.market.models.Cart;
+import ru.geekbrains.spring.market.services.CartService;
+
+import java.util.UUID;
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/cart")
 public class CartController {
 
-    private final Cart cart;
+    private final CartService cartService;
 
-    @GetMapping
-    public CartDto getCart() {
+    @PostMapping
+    public UUID createNewCart() {
+        Cart cart = cartService.save(new Cart());
+        return cart.getId();
+    }
+
+    @GetMapping("/{uuid}")
+    public CartDto getCurrentCart(@PathVariable UUID uuid) {
+        Cart cart = cartService.findById(uuid).orElseThrow(() -> new ResourceNotFoundException("Не найдена корзина с id = " + uuid));;
         return new CartDto(cart);
     }
 
-    @GetMapping("/add/{id}")
-    public void addToCart(@PathVariable Long id) {
-        cart.addToCart(id);
+    @GetMapping("/{uuid}/add/{product_id}")
+    public void addProductToCart(@PathVariable UUID uuid, @PathVariable(name = "product_id") Long productId) {
+        cartService.addToCart(uuid, productId);
     }
 
-    @GetMapping("/inc/{id}")
-    public void incQuantity(@PathVariable Long id) {
-        cart.incQuantity(id);
-    }
+//    @GetMapping("/inc/{id}")
+//    public void incQuantity(@PathVariable Long id) {
+//        cart.incQuantity(id);
+//    }
+//
+//    @GetMapping("/dec/{id}")
+//    public void decQuantity(@PathVariable Long id) {
+//        cart.decQuantity(id);
+//    }
+//
+//    @GetMapping("/delete/{id}")
+//    public void deleteProduct(@PathVariable Long id) {
+//        cart.deleteFromCart(id);
+//    }
+//
+//    @GetMapping("/delete")
+//    public void deleteAllProducts() {
+//        cart.deleteAll();
+//    }
 
-    @GetMapping("/dec/{id}")
-    public void decQuantity(@PathVariable Long id) {
-        cart.decQuantity(id);
-    }
-
-    @GetMapping("/delete/{id}")
-    public void deleteProduct(@PathVariable Long id) {
-        cart.deleteFromCart(id);
-    }
-
-    @GetMapping("/delete")
-    public void deleteAllProducts() {
-        cart.deleteAll();
-    }
 }

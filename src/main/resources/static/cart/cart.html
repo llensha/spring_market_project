@@ -11,17 +11,17 @@
         </tr>
         </thead>
         <tbody>
-        <tr class="d-flex" ng-repeat="orderItem in cartList.items" style="height: 40px">
-            <td class="col-5">{{orderItem.productTitle}}</td>
-            <td class="col-2">{{orderItem.price}}</td>
+        <tr class="d-flex" ng-repeat="cartItem in cartList.items" style="height: 40px">
+            <td class="col-5">{{cartItem.productTitle}}</td>
+            <td class="col-2">{{cartItem.price}}</td>
             <td class="col-2">
-                <button class="btn btn-outline-secondary btn-sm mr-md-3" ng-click="decQuantity(orderItem.id)"> - </button>
-                <label> {{orderItem.quantity}} </label>
-                <button class="btn btn-outline-secondary btn-sm ml-md-3" ng-click="incQuantity(orderItem.id)"> + </button>
+                <button class="btn btn-outline-secondary btn-sm mr-md-3" ng-click="decQuantity(cartItem.id)"> - </button>
+                <label> {{cartItem.quantity}} </label>
+                <button class="btn btn-outline-secondary btn-sm ml-md-3" ng-click="incQuantity(cartItem.id)"> + </button>
             </td>
-            <td class="col-2">{{orderItem.sum}}</td>
+            <td class="col-2">{{cartItem.sum}}</td>
             <td class="col-1">
-                <button class="btn btn-link btn-sm" ng-click="deleteProductFromCart(orderItem.id)" style="margin: 0px; padding: 0px">
+                <button class="btn btn-link btn-sm" ng-click="deleteProductFromCart(cartItem.id)" style="margin: 0px; padding: 0px">
                     <img src="images/basket.ico" alt="delete">
                 </button>
             </td>

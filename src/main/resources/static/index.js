@@ -75,6 +75,11 @@
         if ($localStorage.currentUser) {
             $http.defaults.headers.common.Authorization = 'Bearer ' + $localStorage.currentUser.token;
         }
+
+        if (!$localStorage.myMarketCart) {
+            $localStorage.myMarketCart = new Cart();
+        }
+
     }
 })();
 

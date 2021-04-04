@@ -84,3 +84,20 @@ CREATE TABLE order_items (
                           created_at      TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                           updated_at      TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+
+create table carts (
+                       id                      UUID PRIMARY KEY,
+                       total_sum               INT
+);
+
+create table cart_items (
+                            id                BIGSERIAL PRIMARY KEY,
+                            cart_id           UUID NOT NULL REFERENCES carts (id),
+                            product_id        BIGINT NOT NULL REFERENCES products (id),
+                            title             VARCHAR(255),
+                            quantity          INT,
+                            price             INT,
+                            sum               INT,
+                            created_at        TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                            updated_at        TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
